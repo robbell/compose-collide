@@ -1,0 +1,182 @@
+﻿@model ComposeCollide.Models.ScoreDetail
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=400" />
+    <title>Compose/Collide</title>
+    <style>
+        body {
+            background: slategray;
+            font-family: Courier;
+            font-weight: bold;
+        }
+
+        td {
+            border: lightblue 1px solid;
+        }
+    </style>
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <p>Compose/Collide</p>
+        
+        <table id="grid"></table>
+
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    Collaborate
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(model => model.IsCollaboration, new { @checked = "checked" })
+                        @Html.ValidationMessageFor(model => model.IsCollaboration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                Name
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Creator, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Creator, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            buildTable();
+
+            $("#IsCollaboration").change(function () {
+                $("#solo").toggle(!$(this).is(":checked"));
+            });
+
+            $("form").submit(function () {
+                var data = {
+                    ScoreInfo: getScore(),
+                    IsCollaboration: $("#IsCollaboration").is(":checked"),
+                    Creator: $("#Creator").val(),
+                };
+
+                $.ajax({
+                    url: "/Home/Index",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                });
+
+                return false;
+            });
+
+            $("tr a.decrease").click(function () {
+                var track = $(this).parent().closest("tr");
+                var currentLength = track.data("length");
+                if (currentLength == 1) return;
+                track.find("td[data-beat='" + currentLength + "']").hide();
+                track.data("length", currentLength - 1);
+            });
+
+            $("tr a.increase").click(function () {
+                var track = $(this).parent().closest("tr");
+                var currentLength = track.data("length");
+                if (currentLength == 16) return;
+                track.find("td[data-beat='" + (currentLength + 1) + "']").show();
+                track.data("length", currentLength + 1);
+            });
+        });
+
+        function buildTable() {
+            var grid = $("#grid");
+            var collaborateBody = document.createElement("tbody");
+            var soloBody = document.createElement("tbody");
+            soloBody.setAttribute("id", "solo");
+            soloBody.setAttribute("style", "display:none;");
+            grid.append(collaborateBody);
+            grid.append(soloBody);
+
+            for (var trackCount = 1; trackCount <= 8; trackCount++) {
+                var row = addRow(trackCount > 4 ? soloBody : collaborateBody, trackCount);
+                for (var beatCount = 1; beatCount <= 16; beatCount++) {
+                    addInput(row, trackCount, beatCount);
+                }
+                addResizer(row, trackCount);
+            }
+        }
+
+        function addRow(tbody, trackCount) {
+            var row = document.createElement("tr");
+            row.setAttribute("data-track", trackCount);
+            row.setAttribute("data-length", 16);
+            $(tbody).append(row);
+            return row;
+        }
+
+        function addInput(row, trackCount, beatCount) {
+            var column = document.createElement("td");
+            column.setAttribute("data-beat", beatCount);
+            if (beatCount % 4 == 0) column.setAttribute("class", "bar");
+            $(row).append(column);
+
+            var input = document.createElement("input");
+            input.setAttribute("type", "checkbox");
+            input.setAttribute("data-track", trackCount);
+            input.setAttribute("data-beat", beatCount);
+            input.setAttribute("id", "t" + trackCount + "b" + beatCount);
+            $(column).append(input);
+        }
+
+        function addResizer(row, trackCount) {
+            var column = document.createElement("td");
+
+            var decrease = document.createElement("a");
+            decrease.innerText = "<";
+            decrease.setAttribute("data-track", trackCount);
+            decrease.setAttribute("class", "decrease");
+
+            var increase = document.createElement("a");
+            increase.innerText = ">";
+            increase.setAttribute("data-track", trackCount);
+            increase.setAttribute("class", "increase");
+
+            $(column).append(decrease);
+            $(column).append(increase);
+            $(row).append(column);
+        }
+
+        function getScore() {
+            var result = "";
+            for (var trackCount = 1; trackCount <= 8; trackCount++) {
+                for (var beatCount = 1; beatCount <= 16; beatCount++) {
+                    var input = $("#t" + trackCount + "b" + beatCount);
+                    if (!input.is(":visible")) result += "2";
+                    else result += input.is(":checked") ? "1" : "0";
+                }
+                result += ",";
+            }
+            return result;
+        }
+    </script>
+
+</body>
+</html>
