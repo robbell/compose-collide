@@ -1,22 +1,38 @@
 ﻿using System;
+using System.Configuration;
+using System.Threading;
 
 namespace ComposeCollide.Player
 {
     public class Program
     {
+        private static ScoreQueue queue;
+        private static Playback playback;
+        private static ControlMessages controlMessages;
+
         public static void Main(string[] args)
         {
-            var controlMessages = new ControlMessages(new ScoreQueue(), new Playback());
+            queue = new ScoreQueue();
+            playback = new Playback();
+            controlMessages = new ControlMessages();
+
+            controlMessages.Initialise();
+            PerformPlayback();
         }
 
-        private void ProcessLoop()
+        private static void PerformPlayback()
         {
             while (true)
             {
                 try
                 {
-                    // poll queue
-                    // playback
+                    if (controlMessages.IsPlaybackEnabled())
+                    {
+                        var score = queue.GetNextScoreToPlay();
+                        if (score != null) playback.Play(score);
+                    }
+
+                    Thread.Sleep(Convert.ToInt32(ConfigurationManager.AppSettings["TimeBetweenScores"]) * 1000);
                 }
                 catch (Exception ex)
                 {

@@ -3,20 +3,12 @@ using System.Configuration;
 using System.Net;
 using Bespoke.Common.Osc;
 using System.Linq;
-using ComposeCollide.Shared;
 
 namespace ComposeCollide.Player
 {
     public class ControlMessages
     {
-        private readonly Playback playback;
-        private readonly ScoreQueue scoreQueue;
-
-        public ControlMessages(ScoreQueue scoreQueue, Playback playback)
-        {
-            this.scoreQueue = scoreQueue;
-            this.playback = playback;
-        }
+        private volatile bool enabled;
 
         public void Initialise()
         {
@@ -28,21 +20,12 @@ namespace ComposeCollide.Player
 
         private void MessageReceived(object sender, OscMessageReceivedEventArgs e)
         {
-            var shouldPlay = e.Message.Data.First().ToString().ToUpper() == "PLAY";
-
-            if (shouldPlay)
-            {
-                var score = scoreQueue.GetNextScoreToPlay();
-                if (score != null) playback.Play(score, Convert.ToInt32(e.Message.Data.Last()));
-            }
+            enabled = e.Message.Data.First().ToString().ToUpper() == "PLAY";
         }
-    }
 
-    public class Playback
-    {
-        public void Play(ScoreDetail score, int toInt32)
+        public bool IsPlaybackEnabled()
         {
-            throw new NotImplementedException();
+            return enabled;
         }
     }
 }
