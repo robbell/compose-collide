@@ -173,7 +173,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ScoreDetailsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,6 +199,12 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Reset.css" />
+    <Content Include="img\bar-bg.png" />
+    <Content Include="img\decrease-bg.png" />
+    <Content Include="img\grid-bg.png" />
+    <Content Include="img\increase-bg.png" />
+    <Content Include="img\title-bg.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\composecollide %282%29.pubxml" />

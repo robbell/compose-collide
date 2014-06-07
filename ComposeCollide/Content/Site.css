@@ -1,17 +1,60 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    background: black;
+    padding: 10px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.title {
+    background: url(../img/title-bg.png);
+    width: 275px;
+    height: 20px;
+    text-indent: -999px;
+    display: block;
+    margin-bottom: 10px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.beat {
+    width: 31px;
+    height: 31px;
+    float: left;
+    margin: 5px 10px 5px 0;
+}
+
+.beat[data-active="on"] {
+    background: white;
+}
+
+.beat[data-active="off"] {
+    background: url(../img/grid-bg.png) repeat;
+}
+
+td.bar {
+    background: url(../img/bar-bg.png);
+    background-position-x: right;
+    background-repeat: repeat-y;
+}
+
+.bar[data-beat="16"] {
+    background: none;
+}
+
+.increase, .decrease {
+    display: block;
+    float: left;
+    width: 12px;
+    height: 41px;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-indent: -999px;
+}
+.increase {
+    margin-left: 5px;
+    background-image: url(../img/increase-bg.png);
+}
+.decrease {
+    margin-left: 1px;
+    background-image: url(../img/decrease-bg.png);
+}
+.container {
+    width: 30px;
+    height: 41px;   
 }

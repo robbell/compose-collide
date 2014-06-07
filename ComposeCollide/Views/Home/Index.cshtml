@@ -8,30 +8,20 @@
 
 <html>
 <head>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=400" />
+    <meta name="viewport" content="user-scalable=no, width=320, initial-scale=1" />
     <title>Compose/Collide</title>
-    <style>
-        body {
-            background: slategray;
-            font-family: Courier;
-            font-weight: bold;
-        }
-
-        td {
-            border: lightblue 1px solid;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="~/Content/Reset.css"/>
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
 
-
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-        <p>Compose/Collide</p>
+        <p class="title">Compose/Collide</p>
         
         <table id="grid"></table>
 
@@ -69,6 +59,11 @@
 
             $("#IsCollaboration").change(function () {
                 $("#solo").toggle(!$(this).is(":checked"));
+            });
+
+            $(".beat").click(function () {
+                var previous = $(this).attr("data-active");
+                $(this).attr("data-active", previous == "on" ? "off" : "on");
             });
 
             $("form").submit(function () {
@@ -138,16 +133,19 @@
             if (beatCount % 4 == 0) column.setAttribute("class", "bar");
             $(row).append(column);
 
-            var input = document.createElement("input");
-            input.setAttribute("type", "checkbox");
+            var input = document.createElement("div");
+            input.setAttribute("class", "beat");
             input.setAttribute("data-track", trackCount);
             input.setAttribute("data-beat", beatCount);
+            input.setAttribute("data-active", "off");
             input.setAttribute("id", "t" + trackCount + "b" + beatCount);
             $(column).append(input);
         }
 
         function addResizer(row, trackCount) {
             var column = document.createElement("td");
+            var container = document.createElement("div");
+            container.setAttribute("class", "container");
 
             var decrease = document.createElement("a");
             decrease.innerText = "<";
@@ -159,8 +157,9 @@
             increase.setAttribute("data-track", trackCount);
             increase.setAttribute("class", "increase");
 
-            $(column).append(decrease);
-            $(column).append(increase);
+            $(container).append(decrease);
+            $(container).append(increase);
+            $(column).append(container);
             $(row).append(column);
         }
 
@@ -170,7 +169,7 @@
                 for (var beatCount = 1; beatCount <= 16; beatCount++) {
                     var input = $("#t" + trackCount + "b" + beatCount);
                     if (!input.is(":visible")) result += "2";
-                    else result += input.is(":checked") ? "1" : "0";
+                    else result += input.attr("data-active") == "on" ? "1" : "0";
                 }
                 result += ",";
             }
@@ -180,3 +179,4 @@
 
 </body>
 </html>
+
