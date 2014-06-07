@@ -190,7 +190,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ComposeCollideContext.cs" />
-    <Compile Include="Models\ScoreDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +249,12 @@
     <EmbeddedResource Include="Migrations\201406022026117_PersistScoreInfo.resx">
       <DependentUpon>201406022026117_PersistScoreInfo.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComposeCollide.Shared\ComposeCollide.Shared.csproj">
+      <Project>{ba18e744-e70a-4012-90f5-0ee9de2df819}</Project>
+      <Name>ComposeCollide.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

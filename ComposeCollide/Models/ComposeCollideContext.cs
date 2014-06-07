@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
+using ComposeCollide.Shared;
 
 namespace ComposeCollide.Models
 {
@@ -19,7 +16,7 @@ namespace ComposeCollide.Models
         {
         }
 
-        public System.Data.Entity.DbSet<ComposeCollide.Models.ScoreDetail> ScoreDetails { get; set; }
+        public DbSet<ScoreDetail> ScoreDetails { get; set; }
     
     }
 }

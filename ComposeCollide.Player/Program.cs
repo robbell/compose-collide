@@ -1,9 +1,30 @@
-﻿namespace ComposeCollide.Player
+﻿using System;
+
+namespace ComposeCollide.Player
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            var controlMessages = new ControlMessages(new ScoreQueue(), new Playback());
+        }
+
+        private void ProcessLoop()
+        {
+            while (true)
+            {
+                try
+                {
+                    // poll queue
+                    // playback
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(ex);
+                    Console.ResetColor();
+                }
+            }
         }
     }
 }

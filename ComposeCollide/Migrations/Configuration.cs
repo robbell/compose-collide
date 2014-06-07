@@ -1,5 +1,6 @@
 using System;
 using ComposeCollide.Models;
+using ComposeCollide.Shared;
 
 namespace ComposeCollide.Migrations
 {

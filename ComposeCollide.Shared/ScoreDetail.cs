@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ComposeCollide.Models
+namespace ComposeCollide.Shared
 {
     public class ScoreDetail
     {
@@ -33,7 +33,7 @@ namespace ComposeCollide.Models
             }
             set
             {
-                if(value == null) return;
+                if (value == null) return;
 
                 var trackCount = 0;
                 var beatCount = 0;
