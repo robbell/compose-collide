@@ -33,13 +33,13 @@ namespace ComposeCollide.Controllers
 
         public JsonResult GetNext()
         {
-            var unplayed = db.ScoreDetails.Where(s => s.Played == null).OrderBy(s => s.Created).ToList();
+            var unplayed = db.ScoreDetails.Where(s => s.Played == null).OrderBy(s => s.Created);
             var collaborationsAvailable = unplayed.Count(s => s.IsCollaboration) >= 2;
 
             if (collaborationsAvailable)
             {
                 var collaborations = unplayed.Where(s => s.IsCollaboration).Take(2);
-                var result = Json(CombineCollaborations(collaborations), JsonRequestBehavior.AllowGet);
+                var result = Json(CombineCollaborations(collaborations.ToList()), JsonRequestBehavior.AllowGet);
                 MarkAsPlayed(collaborations);
                 return result;
             }
@@ -62,7 +62,7 @@ namespace ComposeCollide.Controllers
             return new ScoreDetail
             {
                 Creator = first.Creator.Trim() + " & " + second.Creator.Trim(),
-                ScoreInfo = first.ScoreInfo.Substring(0, 68) + second.ScoreInfo.Substring(68, 68)
+                ScoreInfo = first.ScoreInfo.Substring(0, 68) + second.ScoreInfo.Substring(0, 68)
             };
         }
 
