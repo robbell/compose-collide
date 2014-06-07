@@ -33,22 +33,37 @@ namespace ComposeCollide.Controllers
 
         public JsonResult GetNext()
         {
-            var unplayed = db.ScoreDetails.Where(s => s.Played == null).OrderBy(s => s.Created);
+            var unplayed = db.ScoreDetails.Where(s => s.Played == null).OrderBy(s => s.Created).ToList();
             var collaborationsAvailable = unplayed.Count(s => s.IsCollaboration) >= 2;
 
             if (collaborationsAvailable)
             {
                 var collaborations = unplayed.Where(s => s.IsCollaboration).Take(2);
-                return Json(collaborations);
+                var result = Json(CombineCollaborations(collaborations), JsonRequestBehavior.AllowGet);
+                MarkAsPlayed(collaborations);
+                return result;
             }
 
             if (unplayed.Any(s => !s.IsCollaboration))
             {
                 var solo = unplayed.FirstOrDefault(s => !s.IsCollaboration);
-                return Json(solo);
+                MarkAsPlayed(new[] { solo });
+                return Json(solo, JsonRequestBehavior.AllowGet);
             }
 
             return null;
+        }
+
+        private ScoreDetail CombineCollaborations(IList<ScoreDetail> collaborations)
+        {
+            var first = collaborations.First();
+            var second = collaborations.Last();
+
+            return new ScoreDetail
+            {
+                Creator = first.Creator.Trim() + " & " + second.Creator.Trim(),
+                ScoreInfo = first.ScoreInfo.Substring(0, 68) + second.ScoreInfo.Substring(68, 68)
+            };
         }
 
         private void MarkAsPlayed(IEnumerable<ScoreDetail> scores)
