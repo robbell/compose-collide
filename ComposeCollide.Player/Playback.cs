@@ -11,7 +11,7 @@ namespace ComposeCollide.Player
     {
         private const int numberOfTracks = 8;
         private const int numberOfBeats = 16;
-        private readonly int[] positions = new int[numberOfTracks];
+        private int[] positions;
         private readonly IPEndPoint endPoint;
         private int millisecondsBetweenBeats;
 
@@ -22,6 +22,8 @@ namespace ComposeCollide.Player
 
         public void Play(ScoreDetail scoreDetail)
         {
+            positions = new int[numberOfTracks];
+
             SetTimeBetweenFrames(250);
 
             PlayScoreStart(scoreDetail.Creator);
