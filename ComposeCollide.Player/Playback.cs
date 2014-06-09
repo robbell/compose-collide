@@ -24,7 +24,7 @@ namespace ComposeCollide.Player
         {
             positions = new int[numberOfTracks];
 
-            SetTimeBetweenFrames(250);
+            SetTimeBetweenFrames(Convert.ToInt32(ConfigurationManager.AppSettings["Bpm"]));
 
             PlayScoreStart(scoreDetail.Creator);
 
