@@ -22,7 +22,7 @@ namespace ComposeCollide.Player
 
         public void Play(ScoreDetail scoreDetail)
         {
-            SetTimeBetweenFrames(250);
+            SetTimeBetweenFrames(Convert.ToInt32(ConfigurationManager.AppSettings["Bpm"]));
 
             PlayScoreStart(scoreDetail.Creator);
 
