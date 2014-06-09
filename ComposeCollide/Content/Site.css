@@ -64,9 +64,9 @@ td.bar {
 }
 
 #play {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 10px;
-    width: 154px;
+    width: 170px;
     height: 30px;
     float: left;
     background-color: #00AFEA;
@@ -89,7 +89,7 @@ td.bar {
 
 #collaborate {
     position: absolute;
-    left: 428px;
+    left: 370px;
     top: 13px;
     width: 137px;
     height: 14px;
