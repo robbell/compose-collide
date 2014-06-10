@@ -22,6 +22,8 @@ namespace ComposeCollide.Controllers
         {
             scoreDetail.Created = DateTime.Now;
 
+            if (ContainsBadWords(scoreDetail.Creator)) scoreDetail.Played = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 db.ScoreDetails.Add(scoreDetail);
@@ -71,6 +73,17 @@ namespace ComposeCollide.Controllers
         {
             scores.ForEach(s => s.Played = DateTime.Now);
             db.SaveChanges();
+        }
+
+        private bool ContainsBadWords(string name)
+        {
+            var dataFile = Server.MapPath("~/App_Data/swearwords.txt");
+
+            if (!System.IO.File.Exists(dataFile)) return false;
+            
+            var swearWords = System.IO.File.ReadAllLines(dataFile);
+
+            return swearWords.Contains(name);
         }
 
         protected override void Dispose(bool disposing)
