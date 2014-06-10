@@ -112,6 +112,10 @@
             var column = document.createElement("td");
             column.setAttribute("class", "instrument");
             column.setAttribute("id", "i" + trackCount);
+
+            var container = document.createElement("div");
+            $(column).append(container);
+
             $(row).append(column);
 
             return row;
