@@ -108,6 +108,12 @@
             row.setAttribute("data-track", trackCount);
             row.setAttribute("data-length", 16);
             $(tbody).append(row);
+
+            var column = document.createElement("td");
+            column.setAttribute("class", "instrument");
+            column.setAttribute("id", "i" + trackCount);
+            $(row).append(column);
+
             return row;
         }
 
