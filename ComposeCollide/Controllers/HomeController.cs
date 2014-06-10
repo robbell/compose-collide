@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using ComposeCollide.Models;
 using ComposeCollide.Shared;
@@ -83,7 +84,15 @@ namespace ComposeCollide.Controllers
             
             var swearWords = System.IO.File.ReadAllLines(dataFile);
 
-            return swearWords.Contains(name);
+            foreach (var part in name.Split(' '))
+            {
+                var rgx = new Regex("[^a-zA-Z0-9 -]");
+                var cleanPart = rgx.Replace(part, "");
+
+                if (swearWords.Contains(cleanPart.ToLower())) return true;
+            }
+
+            return false;
         }
 
         protected override void Dispose(bool disposing)
