@@ -23,7 +23,7 @@
 
         <p class="title">Compose/Collide</p>
         
-        <div id="collaborate" data-active="on"></div>
+        <div id="collaborate" data-active="off"></div>
 
         <table id="grid"></table>
 
@@ -90,7 +90,6 @@
             var collaborateBody = document.createElement("tbody");
             var soloBody = document.createElement("tbody");
             soloBody.setAttribute("id", "solo");
-            soloBody.setAttribute("style", "display:none;");
             grid.append(collaborateBody);
             grid.append(soloBody);
 
