@@ -3,7 +3,7 @@ Compose/Collide
 
 A successor to [Tweeting Machines (drum-score)](https://github.com/robbell/drum-score), Compose/Collide is an interactive robotic rhythm generator.
 
-Users compose scores on their mobiles at [composecollide.co.uk](http://composecollide.co.uk) and see them perfomed live.
+Users compose scores on their mobiles at [composecollide.co.uk](http://composecollide.co.uk) and see them performed live.
 
 ![Web app](https://github.com/robbell/compose-collide/raw/master/docs/web-app.png)
 
