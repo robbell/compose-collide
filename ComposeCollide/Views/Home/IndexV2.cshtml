@@ -186,7 +186,7 @@
             for (var trackCount = 1; trackCount <= 8; trackCount++) {
                 for (var beatCount = 1; beatCount <= 16; beatCount++) {
                     var input = $("#t" + trackCount + "b" + beatCount);
-                    if (!input.is(":visible")) result += "2";
+                    if (input.css('visibility') === 'hidden') result += "2";
                     else result += input.attr("data-active") === "on" ? "1" : "0";
                 }
                 result += ",";
