@@ -18,6 +18,11 @@ namespace ComposeCollide.Controllers
             return View();
         }
 
+        public ActionResult IndexV2()
+        {
+            return View();
+        }
+
         [HttpPost, ActionName("Index")]
         public ActionResult Create(ScoreDetail scoreDetail)
         {

@@ -1,0 +1,188 @@
+﻿@model ComposeCollide.Shared.ScoreDetail
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="user-scalable=no, width=320, initial-scale=1" />
+    <title>Compose/Collide</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/Reset.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/SiteV2.css" />
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquerytouch")
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <p class="title">Compose/Collide</p>
+
+        <div id="collaborate" data-active="off"></div>
+
+        <div id="grid"></div>
+
+        <div id="play" data-status="ready"></div>
+    }
+
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            buildTable();
+
+            $(".beat").click(function () {
+                var previous = $(this).attr("data-active");
+                $(this).attr("data-active", previous == "on" ? "off" : "on");
+            });
+
+            $("#collaborate").click(function () {
+                var previous = $(this).attr("data-active");
+                $(this).attr("data-active", previous == "on" ? "off" : "on");
+                $("#solo").toggle(previous == "on");
+            });
+
+            $("#play").click(function () {
+                var name = prompt("Please tell us your name", "");
+                if (!name) return false;
+
+                var data = {
+                    ScoreInfo: getScore(),
+                    IsCollaboration: $("#collaborate").attr("data-active") == "on",
+                    Creator: name
+                };
+
+                $.ajax({
+                    url: "/Home/Index",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                });
+
+                alert("Score sent");
+
+                return false;
+            });
+
+            $("tr a.decrease").click(function () {
+                var track = $(this).parent().closest("tr");
+                var currentLength = track.data("length");
+                if (currentLength == 1) return;
+                track.find("td[data-beat='" + currentLength + "']").hide();
+                track.data("length", currentLength - 1);
+            });
+
+            $("tr a.increase").click(function () {
+                var track = $(this).parent().closest("tr");
+                var currentLength = track.data("length");
+                if (currentLength == 16) return;
+                track.find("td[data-beat='" + (currentLength + 1) + "']").show();
+                track.data("length", currentLength + 1);
+            });
+        });
+
+        function buildTable() {
+            var grid = $("#grid");
+
+            var collaborateBody = document.createElement("div");
+            var soloBody = document.createElement("div");
+            soloBody.setAttribute("id", "solo");
+
+            grid.append(collaborateBody);
+            grid.append(soloBody);
+
+            for (var trackCount = 1; trackCount <= 8; trackCount++) {
+                var track = addRow(trackCount > 4 ? soloBody : collaborateBody, trackCount);
+
+                for (var beatCount = 2; beatCount <= 16; beatCount++) {
+                    addInput(track, trackCount, beatCount);
+                }
+                addResizer(track, trackCount);
+            }
+        }
+
+        function addRow(trackGroup, trackCount) {
+            var trackContainer = document.createElement("div");
+            trackContainer.setAttribute("data-track", trackCount);
+            trackContainer.setAttribute("data-length", 16);
+            $(trackContainer).addClass("grid-track");
+            $(trackGroup).append(trackContainer);
+
+            var instrumentContainer = document.createElement("div");
+            instrumentContainer.setAttribute("class", "instrument");
+            instrumentContainer.setAttribute("id", "i" + trackCount);
+
+            var instrument = document.createElement("div");
+            $(instrumentContainer).append(instrument);
+            $(trackContainer).append(instrumentContainer);
+
+            addInput(trackContainer, trackCount, 1);
+
+            var sliderContainer = document.createElement("div");
+            sliderContainer.setAttribute("id", "c" + trackCount);
+            $(sliderContainer).addClass("slider-container");
+            $(trackContainer).append(sliderContainer);
+
+            return sliderContainer;
+        }
+
+        function addInput(track, trackCount, beatCount) {
+            var beatContainer = document.createElement("div");
+            beatContainer.setAttribute("data-beat", beatCount);
+            beatContainer.setAttribute("class", "beat-container");
+            if (beatCount % 4 === 0) $(beatContainer).addClass("bar");
+            $(track).append(beatContainer);
+
+            var input = document.createElement("div");
+            input.setAttribute("class", "beat");
+            input.setAttribute("data-track", trackCount);
+            input.setAttribute("data-beat", beatCount);
+            input.setAttribute("data-active", "off");
+            input.setAttribute("id", "t" + trackCount + "b" + beatCount);
+            $(beatContainer).append(input);
+        }
+
+        function addResizer(row, trackCount) {
+            var container = document.createElement("div");
+            container.setAttribute("class", "container");
+
+            var decrease = document.createElement("a");
+            decrease.innerText = "<";
+            decrease.setAttribute("data-track", trackCount);
+            decrease.setAttribute("class", "decrease");
+
+            var increase = document.createElement("a");
+            increase.innerText = ">";
+            increase.setAttribute("data-track", trackCount);
+            increase.setAttribute("class", "increase");
+
+            $(container).append(decrease);
+            $(container).append(increase);
+
+            $(container).draggable({ axis: "x", scroll: false, containment: "#c" + trackCount });
+
+            $(row).append(container);
+        }
+
+        function getScore() {
+            var result = "";
+            for (var trackCount = 1; trackCount <= 8; trackCount++) {
+                for (var beatCount = 1; beatCount <= 16; beatCount++) {
+                    var input = $("#t" + trackCount + "b" + beatCount);
+                    if (!input.is(":visible")) result += "2";
+                    else result += input.attr("data-active") === "on" ? "1" : "0";
+                }
+                result += ",";
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,168 @@
+﻿body {
+    background: black;
+    padding: 10px;
+}
+
+.title {
+    background: url(../img/title-bg.png);
+    width: 275px;
+    height: 20px;
+    text-indent: -999px;
+    display: block;
+    margin-bottom: 10px;
+    margin-left: 27px;
+}
+
+#collaborate {
+    position: absolute;
+    left: 412px;
+    top: 13px;
+    width: 137px;
+    height: 14px;
+}
+
+    #collaborate[data-active="on"] {
+        background-image: url(../img/collaborate-bg-on.png);
+    }
+
+    #collaborate[data-active="off"] {
+        background-image: url(../img/collaborate-bg-off.png);
+    }
+
+.instrument {
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: left;
+    float: left;
+    height: 45px;
+    width: 27px;
+}
+
+    .instrument div {
+        width: 17px;
+        height: 17px;
+        padding: 0 5px 0;
+    }
+
+.slider-container, .beat-container {
+    float: left;
+}
+
+.grid-track {
+    float: left;
+    clear: both;
+}
+
+.beat {
+    width: 35px;
+    height: 35px;
+    float: left;
+    margin: 5px 10px 5px 0;
+}
+
+    .beat[data-active="on"] {
+        background: white;
+    }
+
+    .beat[data-active="off"] {
+        background: url(../img/grid-bg.png) repeat;
+    }
+
+
+.bar {
+    background: url(../img/bar-bg.png);
+    background-position-x: right;
+    background-repeat: repeat-y;
+}
+
+.bar[data-beat="16"] {
+    background: none;
+}
+
+
+
+
+.increase, .decrease {
+    display: block;
+    float: left;
+    width: 12px;
+    height: 41px;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-indent: -999px;
+}
+
+.increase {
+    margin-left: 5px;
+    margin-right: 10px;
+    background-image: url(../img/increase-bg.png);
+}
+
+.decrease {
+    margin-left: 1px;
+    background-image: url(../img/decrease-bg.png);
+}
+
+
+.container {
+    float: left;
+    width: 40px;
+    height: 41px;
+}
+
+#play {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 27px;
+    width: 170px;
+    height: 30px;
+    float: left;
+    background-color: #00AFEA;
+}
+
+    #play[data-status="ready"] {
+        background-image: url(../img/play-bg-on.png);
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: center;
+    }
+
+    #play[data-active="sending"] {
+        background-image: url(../img/play-bg-sending.png);
+    }
+
+    #play[data-active="sent"] {
+        background-image: url(../img/play-bg-sent.png);
+    }
+
+#i1 {
+    background-image: url(../img/bongo-bg.png);
+}
+
+#i2 {
+    background-image: url(../img/cowbell-bg.png);
+}
+
+#i3 {
+    background-image: url(../img/shaker-bg.png);
+}
+
+#i4 {
+    background-image: url(../img/claves-bg.png);
+}
+
+#i5 {
+    background-image: url(../img/snare-bg.png);
+}
+
+#i6 {
+    background-image: url(../img/block-bg.png);
+}
+
+#i7 {
+    background-image: url(../img/bean-bg.png);
+}
+
+#i8 {
+    background-image: url(../img/scrape-bg.png);
+}
