@@ -49,6 +49,7 @@
 }
 
 .grid-track {
+    width: 787px;
     float: left;
     clear: both;
 }
@@ -117,6 +118,7 @@
     width: 170px;
     height: 30px;
     float: left;
+    clear: both;
     background-color: #00AFEA;
 }
 
