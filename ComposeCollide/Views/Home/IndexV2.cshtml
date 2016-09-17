@@ -78,22 +78,6 @@
                     hideBeats($(this));
                 }
             });
-
-            $("tr a.decrease").click(function () {
-                var track = $(this).parent().closest("tr");
-                var currentLength = track.data("length");
-                if (currentLength == 1) return;
-                track.find("td[data-beat='" + currentLength + "']").hide();
-                track.data("length", currentLength - 1);
-            });
-
-            $("tr a.increase").click(function () {
-                var track = $(this).parent().closest("tr");
-                var currentLength = track.data("length");
-                if (currentLength == 16) return;
-                track.find("td[data-beat='" + (currentLength + 1) + "']").show();
-                track.data("length", currentLength + 1);
-            });
         });
 
         function hideBeats(scroller) {
@@ -183,7 +167,7 @@
             $(container).append(decrease);
             $(container).append(increase);
 
-            $(container).draggable({ axis: "x", scroll: false, containment: "#c" + trackCount });
+            $(container).draggable({ axis: "x", scroll: false, containment: "#c" + trackCount, grid: [ 45, 45 ] });
 
             $(row).append(container);
         }
