@@ -17,6 +17,7 @@ namespace ComposeCollide
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquerytouch").Include(
+                        "~/Scripts/tappy.js",
                         "~/Scripts/jquery.ui.touch-punch.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

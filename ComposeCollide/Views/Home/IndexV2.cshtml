@@ -41,6 +41,11 @@
                 $(this).attr("data-active", previous == "on" ? "off" : "on");
             });
 
+            $("a.beat").bind("tap", function (e) {
+                var previous = $(this).attr("data-active");
+                $(this).attr("data-active", previous == "on" ? "off" : "on");
+            });
+
             $("#collaborate").click(function () {
                 var previous = $(this).attr("data-active");
                 $(this).attr("data-active", previous == "on" ? "off" : "on");
