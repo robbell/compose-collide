@@ -76,10 +76,8 @@
                     var resizePosition = $(this).position().left;
 
                     container.children(".beat-container").each(function () {
-                        console.trace($(this).position().left + $(this).width() + " a: " + resizePosition);
-
-                        if ($(this).position().left + $(this).width() > resizePosition) $(this).fadeTo(0, 0);
-                        else $(this).fadeTo(0, 1);
+                        if ($(this).position().left + $(this).width() > resizePosition) $(this).css('visibility', 'hidden');
+                        else $(this).css('visibility', 'visible');
                     });
                 }
             });
