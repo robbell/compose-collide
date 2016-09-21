@@ -52,20 +52,42 @@ namespace ComposeCollide.Player
         {
             var score = scoreDetail.Score;
 
-            SendMessage(m =>
-                {
-                    for (var trackCount = 0; trackCount < numberOfTracks; trackCount++)
-                    {
-                        if (score[trackCount][positions[trackCount]] == 2)
-                        {
-                            positions[trackCount] = 0;
-                        }
+            SendMessage(m => BuildBeatMessage(score, m));
+        }
 
-                        if (score[trackCount][positions[trackCount]] == 1) m.Append(trackCount + 1);
+        private void BuildBeatMessage(int[][] score, OscMessage m)
+        {
+            for (var trackCount = 0; trackCount < numberOfTracks; trackCount++)
+            {
+                BuildTrackMessage(score, m, trackCount);
+            }
+        }
 
-                        positions[trackCount] = positions[trackCount] == numberOfBeats - 1 ? 0 : positions[trackCount] + 1;
-                    }
-                });
+        private void BuildTrackMessage(int[][] score, OscMessage m, int trackCount)
+        {
+            if (IsShortTrack(score, trackCount))
+            {
+                positions[trackCount] = 0;
+            }
+
+            if (HasBeat(score, trackCount)) m.Append(trackCount + 1);
+
+            ProgressTrackPosition(trackCount);
+        }
+
+        private void ProgressTrackPosition(int trackCount)
+        {
+            positions[trackCount] = positions[trackCount] == numberOfBeats - 1 ? 0 : positions[trackCount] + 1;
+        }
+
+        private bool HasBeat(int[][] score, int trackCount)
+        {
+            return score[trackCount][positions[trackCount]] == 1;
+        }
+
+        private bool IsShortTrack(int[][] score, int trackCount)
+        {
+            return score[trackCount][positions[trackCount]] == 2;
         }
 
         private void SetTimeBetweenFrames(int tempo)
@@ -80,7 +102,7 @@ namespace ComposeCollide.Player
 
         public void PlayScoreStart(string creator)
         {
-            SendMessage(m => m.Append(string.Format("BOM {0}", creator)));
+            SendMessage(m => m.Append($"BOM {creator}"));
         }
 
         public void PlayScoreEnd()
