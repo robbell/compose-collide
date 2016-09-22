@@ -8,24 +8,26 @@
 
 <html>
 <head>
-    <meta name="viewport" content="user-scalable=no, width=320, initial-scale=1" />
+    <meta name="viewport" content="width=640, initial-scale=1" />
     <title>Compose/Collide</title>
     <link rel="stylesheet" type="text/css" href="~/Content/Reset.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquerytouch")
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <p class="title">Compose/Collide</p>
-        
+
         <div id="collaborate" data-active="off"></div>
 
-        <table id="grid"></table>
+        <div id="grid"></div>
 
         <div id="play" data-status="ready"></div>
     }
@@ -34,7 +36,7 @@
         $(function () {
             buildTable();
 
-            $(".beat").click(function () {
+            $(".beat").bind("tap", function (e) {
                 var previous = $(this).attr("data-active");
                 $(this).attr("data-active", previous == "on" ? "off" : "on");
             });
@@ -68,63 +70,77 @@
                 return false;
             });
 
-            $("tr a.decrease").click(function () {
-                var track = $(this).parent().closest("tr");
-                var currentLength = track.data("length");
-                if (currentLength == 1) return;
-                track.find("td[data-beat='" + currentLength + "']").hide();
-                track.data("length", currentLength - 1);
-            });
-
-            $("tr a.increase").click(function () {
-                var track = $(this).parent().closest("tr");
-                var currentLength = track.data("length");
-                if (currentLength == 16) return;
-                track.find("td[data-beat='" + (currentLength + 1) + "']").show();
-                track.data("length", currentLength + 1);
+            $(".resize").draggable({
+                drag: function () {
+                    hideBeats($(this));
+                },
+                stop: function () {
+                    hideBeats($(this));
+                }
             });
         });
 
+        function hideBeats(scroller) {
+            var resizePosition = scroller.position().left;
+            var container = scroller.parent(".slider-container");
+
+            container.children(".beat-container").each(function () {
+                if ($(this).position().left + $(this).width() > resizePosition) $(this).css('visibility', 'hidden');
+                else $(this).css('visibility', 'visible');
+            });
+        }
+
         function buildTable() {
             var grid = $("#grid");
-            var collaborateBody = document.createElement("tbody");
-            var soloBody = document.createElement("tbody");
+
+            var collaborateBody = document.createElement("div");
+            var soloBody = document.createElement("div");
             soloBody.setAttribute("id", "solo");
+
             grid.append(collaborateBody);
             grid.append(soloBody);
 
             for (var trackCount = 1; trackCount <= 8; trackCount++) {
-                var row = addRow(trackCount > 4 ? soloBody : collaborateBody, trackCount);
-                for (var beatCount = 1; beatCount <= 16; beatCount++) {
-                    addInput(row, trackCount, beatCount);
+                var track = addRow(trackCount > 4 ? soloBody : collaborateBody, trackCount);
+
+                for (var beatCount = 2; beatCount <= 16; beatCount++) {
+                    addInput(track, trackCount, beatCount);
                 }
-                addResizer(row, trackCount);
+                addResizer(track, trackCount);
             }
         }
 
-        function addRow(tbody, trackCount) {
-            var row = document.createElement("tr");
-            row.setAttribute("data-track", trackCount);
-            row.setAttribute("data-length", 16);
-            $(tbody).append(row);
+        function addRow(trackGroup, trackCount) {
+            var trackContainer = document.createElement("div");
+            trackContainer.setAttribute("data-track", trackCount);
+            trackContainer.setAttribute("data-length", 16);
+            $(trackContainer).addClass("grid-track");
+            $(trackGroup).append(trackContainer);
 
-            var column = document.createElement("td");
-            column.setAttribute("class", "instrument");
-            column.setAttribute("id", "i" + trackCount);
+            var instrumentContainer = document.createElement("div");
+            instrumentContainer.setAttribute("class", "instrument");
+            instrumentContainer.setAttribute("id", "i" + trackCount);
 
-            var container = document.createElement("div");
-            $(column).append(container);
+            var instrument = document.createElement("div");
+            $(instrumentContainer).append(instrument);
+            $(trackContainer).append(instrumentContainer);
 
-            $(row).append(column);
+            addInput(trackContainer, trackCount, 1);
 
-            return row;
+            var sliderContainer = document.createElement("div");
+            sliderContainer.setAttribute("id", "c" + trackCount);
+            $(sliderContainer).addClass("slider-container");
+            $(trackContainer).append(sliderContainer);
+
+            return sliderContainer;
         }
 
-        function addInput(row, trackCount, beatCount) {
-            var column = document.createElement("td");
-            column.setAttribute("data-beat", beatCount);
-            if (beatCount % 4 == 0) column.setAttribute("class", "bar");
-            $(row).append(column);
+        function addInput(track, trackCount, beatCount) {
+            var beatContainer = document.createElement("div");
+            beatContainer.setAttribute("data-beat", beatCount);
+            beatContainer.setAttribute("class", "beat-container");
+            if (beatCount % 4 === 0) $(beatContainer).addClass("bar");
+            $(track).append(beatContainer);
 
             var input = document.createElement("div");
             input.setAttribute("class", "beat");
@@ -132,28 +148,28 @@
             input.setAttribute("data-beat", beatCount);
             input.setAttribute("data-active", "off");
             input.setAttribute("id", "t" + trackCount + "b" + beatCount);
-            $(column).append(input);
+            $(beatContainer).append(input);
         }
 
         function addResizer(row, trackCount) {
-            var column = document.createElement("td");
             var container = document.createElement("div");
-            container.setAttribute("class", "container");
+            $(container).addClass("container resize");
+            container.setAttribute("data-track", trackCount);
 
             var decrease = document.createElement("a");
             decrease.innerText = "<";
-            decrease.setAttribute("data-track", trackCount);
             decrease.setAttribute("class", "decrease");
 
             var increase = document.createElement("a");
             increase.innerText = ">";
-            increase.setAttribute("data-track", trackCount);
             increase.setAttribute("class", "increase");
 
             $(container).append(decrease);
             $(container).append(increase);
-            $(column).append(container);
-            $(row).append(column);
+
+            $(container).draggable({ axis: "x", scroll: false, containment: "#c" + trackCount, grid: [ 45, 45 ] });
+
+            $(row).append(container);
         }
 
         function getScore() {
@@ -161,15 +177,14 @@
             for (var trackCount = 1; trackCount <= 8; trackCount++) {
                 for (var beatCount = 1; beatCount <= 16; beatCount++) {
                     var input = $("#t" + trackCount + "b" + beatCount);
-                    if (!input.is(":visible")) result += "2";
-                    else result += input.attr("data-active") == "on" ? "1" : "0";
+                    if (input.css('visibility') === 'hidden') result += "2";
+                    else result += input.attr("data-active") === "on" ? "1" : "0";
                 }
                 result += ",";
             }
             return result;
         }
     </script>
-
 </body>
 </html>
 
