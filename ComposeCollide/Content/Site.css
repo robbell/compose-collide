@@ -139,29 +139,29 @@
 }
 
 #i2 {
-    background-image: url(../img/cowbell-bg.png);
-}
-
-#i3 {
-    background-image: url(../img/shaker-bg.png);
-}
-
-#i4 {
-    background-image: url(../img/claves-bg.png);
-}
-
-#i5 {
     background-image: url(../img/snare-bg.png);
 }
 
-#i6 {
+#i3 {
+    background-image: url(../img/hihat-bg.png);
+}
+
+#i4 {
+    background-image: url(../img/hihat-bg.png);
+}
+
+#i5 {
     background-image: url(../img/block-bg.png);
 }
 
+#i6 {
+    background-image: url(../img/scrape-bg.png);
+}
+
 #i7 {
-    background-image: url(../img/bean-bg.png);
+    background-image: url(../img/tambourine-bg.png);
 }
 
 #i8 {
-    background-image: url(../img/scrape-bg.png);
+    background-image: url(../img/bowl-bg.png);
 }
