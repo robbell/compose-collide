@@ -7,6 +7,6 @@ Users compose scores on their mobiles at [composecollide.co.uk](http://composeco
 
 ![Web app](https://github.com/robbell/compose-collide/raw/master/docs/web-app.png)
 
-Compose/Collide was on display at the Natural History Museum for Universities Week 2014.
+Compose/Collide was originally on display at the Natural History Museum as part of Universities Week 2014 and later as part of London Design Week 2016 at the V&A.
 
 ![Machine](https://github.com/robbell/drum-score/raw/master/docs/machine.jpg)
